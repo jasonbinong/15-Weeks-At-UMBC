@@ -1,12 +1,22 @@
 # 15 Weeks at UMBC
 
-15 Weeks at UMBC is a choice-driven campus life game about balancing health, food, grades, and money through a UMBC semester.
+15 Weeks at UMBC is a complete choice-driven campus life game about balancing health, food, grades, and money through a full UMBC semester.
 
 This repo includes:
 
-- A deployable browser version for GitHub Pages
+- A finished 15-week browser game for GitHub Pages
 - The original Processing sketch in `15_Weeks_At_UMBC.pde`
 - Campus image assets in the `data` folder
+
+## Features
+
+- Commuter and on-campus student paths
+- 15 weekly decision scenarios across the semester
+- Three meaningful choices per week
+- Dynamic tracking for health, food, grades, and money
+- Profile-specific events that affect the semester
+- Early failure states and multiple final endings
+- Responsive layout for desktop and mobile
 
 ## Play Online
 
