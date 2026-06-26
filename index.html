@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 Weeks at UMBC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="hero-panel">
+      <div class="top-row">
+        <div>
+          <p class="eyebrow">UMBC semester survival game</p>
+          <h1>15 Weeks at UMBC</h1>
+        </div>
+        <button class="restart-button" id="restartButton" type="button" aria-label="Restart game" title="Restart game">↻</button>
+      </div>
+
+      <section class="menu-view" id="menuView">
+        <div class="menu-copy">
+          <h2>Balance campus life before the semester gets away from you.</h2>
+          <p>Make weekly decisions that affect health, food, grades, and money. This web version keeps the original Processing game's scenario logic and makes it playable in the browser.</p>
+        </div>
+        <button class="primary-button" id="startButton" type="button">Start Game</button>
+      </section>
+
+      <section class="game-view hidden" id="gameView" aria-live="polite">
+        <div class="scene-layout">
+          <div class="image-frame">
+            <img id="sceneImage" src="data/library.jpg" alt="UMBC campus scene">
+          </div>
+
+          <article class="question-card">
+            <div class="question-meta">
+              <span id="weekLabel">Week 1</span>
+              <span id="scenarioLabel">Scenario 1 of 10</span>
+            </div>
+            <h2 id="scenarioText"></h2>
+            <div class="choice-row">
+              <button class="choice-button yes" id="yesButton" type="button">Yes</button>
+              <button class="choice-button no" id="noButton" type="button">No</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="result-view hidden" id="resultView">
+        <p class="eyebrow" id="resultEyebrow">Semester over</p>
+        <h2 id="resultTitle"></h2>
+        <p id="resultText"></p>
+        <button class="primary-button" id="playAgainButton" type="button">Play Again</button>
+      </section>
+    </section>
+
+    <aside class="status-panel" aria-label="Player status">
+      <div>
+        <p class="eyebrow">Current Stats</p>
+        <h2 id="statusTitle">Ready to Play</h2>
+      </div>
+
+      <div class="meters" id="meters"></div>
+
+      <section class="notes-panel">
+        <h3>Recent Choices</h3>
+        <ul id="choiceLog">
+          <li>Click Start Game to begin Week 1.</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
