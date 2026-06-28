@@ -1,5 +1,7 @@
 # 15 Weeks at UMBC
 
+![15 Weeks at UMBC thumbnail](thumbnail.png)
+
 15 Weeks at UMBC is a complete choice-driven campus life game about balancing health, food, grades, and money through a full UMBC semester.
 
 This repo includes:
