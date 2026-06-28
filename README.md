@@ -4,6 +4,10 @@
 
 15 Weeks at UMBC is a complete choice-driven campus life game about balancing health, food, grades, and money through a full UMBC semester.
 
+## Play Online
+
+[Play 15 Weeks at UMBC](https://jasonbinong.github.io/15-Weeks-At-UMBC/)
+
 This repo includes:
 
 - A finished 15-week browser game for GitHub Pages
@@ -20,13 +24,12 @@ This repo includes:
 - Early failure states and multiple final endings
 - Responsive layout for desktop and mobile
 
-## Play Online
+## What This Project Shows
 
-After GitHub Pages is enabled, the live game will be available at:
-
-```text
-https://jasonbinong.github.io/15-Weeks-At-UMBC/
-```
+- Interactive game design with meaningful tradeoffs
+- Java/Processing fundamentals translated into a browser game
+- State management across health, food, grades, money, and time
+- User-centered design around campus life decisions
 
 ## Run the Browser Version
 
