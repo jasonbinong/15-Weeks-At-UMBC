@@ -31,6 +31,34 @@ This repo includes:
 - State management across health, food, grades, money, and time
 - User-centered design around campus life decisions
 
+## Case Study
+
+### Problem
+
+College students make constant tradeoffs between studying, working, resting, eating, socializing, and taking care of their health. I wanted to turn those everyday decisions into an interactive game that makes the consequences visible.
+
+### Solution
+
+15 Weeks at UMBC is a semester-long decision game where players choose weekly actions and manage health, food, grades, and money. Each decision affects the semester, leading to different outcomes based on the player's priorities and tradeoffs.
+
+### Key Design Decisions
+
+- Built a 15-week structure to mirror a real semester
+- Used multiple student paths so the experience changes based on commuter or on-campus choices
+- Added early failure states and multiple endings to make decisions meaningful
+- Preserved the original Processing sketch while also creating a deployable browser version
+
+### What I Learned
+
+This project helped me practice programming logic, state management, interaction design, and translating a Java/Processing project into a browser-based experience. It also taught me how small design choices can make a simple game feel more complete.
+
+### Future Improvements
+
+- Add more event variety based on major, work schedule, or club involvement
+- Add save/load support
+- Add more visual polish and animations
+- Expand endings with more detailed semester summaries
+
 ## Run the Browser Version
 
 Open `index.html` in a web browser.
