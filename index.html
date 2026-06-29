@@ -12,39 +12,47 @@
 <body>
   <main class="app-shell">
     <section class="stage-panel">
-      <div class="topbar">
+      <header class="topbar">
         <div>
-          <p class="eyebrow">Semester survival game</p>
+          <p class="eyebrow">Semester strategy game</p>
           <h1>15 Weeks at UMBC</h1>
         </div>
-        <button class="icon-button" id="restartButton" type="button" aria-label="Restart game" title="Restart game">Reset</button>
-      </div>
+        <div class="top-actions">
+          <button class="secondary-button" id="continueButton" type="button">Continue</button>
+          <button class="icon-button" id="restartButton" type="button" aria-label="Restart game" title="Restart game">Reset</button>
+        </div>
+      </header>
 
       <section class="menu-view" id="menuView">
         <div class="menu-grid">
           <div class="menu-copy">
-            <h2>Get through the semester without losing the balance that keeps you moving.</h2>
-            <p>Choose a student path, manage weekly pressure, and protect health, food, grades, and money across a full 15-week UMBC semester.</p>
+            <h2>Survive a full semester by making tradeoffs that actually matter.</h2>
+            <p>Choose a student path, manage weekly pressure, protect your support systems, and see what kind of semester you build by finals week.</p>
           </div>
 
-          <div class="profile-picker" role="radiogroup" aria-label="Choose student path">
-            <button class="profile-card active" type="button" data-profile="commuter" aria-pressed="true">
-              <span>Commuter</span>
-              <strong>Starts with better money, but travel drains health and time.</strong>
-            </button>
-            <button class="profile-card" type="button" data-profile="campus" aria-pressed="false">
-              <span>On-Campus</span>
-              <strong>Starts with stronger social access, but spending is tighter.</strong>
-            </button>
-          </div>
+          <aside class="start-card">
+            <span class="mini-label">Game systems</span>
+            <div class="system-list">
+              <span>6 student paths</span>
+              <span>15 weekly events</span>
+              <span>7 tracked stats</span>
+              <span>Dynamic consequences</span>
+              <span>Save and continue</span>
+              <span>Multiple endings</span>
+            </div>
+          </aside>
         </div>
 
-        <div class="feature-strip" aria-label="Game systems">
-          <span>15 weeks</span>
-          <span>4 tracked stats</span>
-          <span>Profile-specific events</span>
-          <span>Multiple endings</span>
-        </div>
+        <div class="profile-picker" id="profilePicker" role="radiogroup" aria-label="Choose student path"></div>
+
+        <section class="loadout-panel">
+          <div>
+            <span class="mini-label">Selected path</span>
+            <h3 id="profileName">Commuter Student</h3>
+            <p id="profileDescription"></p>
+          </div>
+          <div class="loadout-bars" id="loadoutBars"></div>
+        </section>
 
         <button class="primary-button" id="startButton" type="button">Start Semester</button>
       </section>
@@ -58,6 +66,8 @@
           <div class="week-pill" id="weekCounter">1 / 15</div>
         </div>
 
+        <div class="semester-track" id="semesterTrack" aria-label="Semester progress"></div>
+
         <div class="scene-grid">
           <figure class="scene-media">
             <img id="sceneImage" src="data/library.jpg" alt="UMBC campus scene">
@@ -65,8 +75,12 @@
           </figure>
 
           <article class="scenario-card">
-            <p class="scenario-kicker" id="scenarioKicker">First Monday</p>
+            <div class="scenario-meta">
+              <p class="scenario-kicker" id="scenarioKicker">First Monday</p>
+              <span id="difficultyBadge">Normal</span>
+            </div>
             <h2 id="scenarioText">Your semester begins.</h2>
+            <p class="scenario-detail" id="scenarioDetail"></p>
             <div class="choices" id="choices"></div>
           </article>
         </div>
@@ -77,6 +91,10 @@
         <h2 id="resultTitle"></h2>
         <p id="resultText"></p>
         <div class="result-grid" id="resultGrid"></div>
+        <div class="ending-panel">
+          <h3>Semester Report</h3>
+          <ul id="endingNotes"></ul>
+        </div>
         <button class="primary-button" id="playAgainButton" type="button">Play Again</button>
       </section>
     </section>
@@ -85,11 +103,12 @@
       <div class="status-heading">
         <div>
           <p class="eyebrow">Current status</p>
-          <h2 id="statusTitle">Commuter</h2>
+          <h2 id="statusTitle">Commuter Student</h2>
         </div>
         <span class="score-badge" id="scoreBadge">52</span>
       </div>
 
+      <div class="alert-stack" id="alertStack"></div>
       <div class="meters" id="meters"></div>
 
       <section class="notes-panel">
@@ -97,6 +116,11 @@
         <ul id="choiceLog">
           <li>Choose a path to begin the semester.</li>
         </ul>
+      </section>
+
+      <section class="notes-panel">
+        <h3>Achievements</h3>
+        <div class="achievement-list" id="achievementList"></div>
       </section>
     </aside>
   </main>

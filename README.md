@@ -2,7 +2,7 @@
 
 ![15 Weeks at UMBC thumbnail](thumbnail.png)
 
-15 Weeks at UMBC is a complete choice-driven campus life game about balancing health, food, grades, and money through a full UMBC semester.
+15 Weeks at UMBC is a complete choice-driven campus life strategy game about balancing health, food, grades, money, stress, support, and career readiness through a full UMBC semester.
 
 ## Play Online
 
@@ -16,11 +16,15 @@ This repo includes:
 
 ## Features
 
-- Commuter and on-campus student paths
+- Six student paths: commuter, working student, first-year, transfer, honors, and student athlete
 - 15 weekly decision scenarios across the semester
 - Three meaningful choices per week
-- Dynamic tracking for health, food, grades, and money
+- Dynamic tracking for health, food, grades, money, stress, support, and career readiness
 - Profile-specific events that affect the semester
+- Dynamic consequences when stress, money, food, or health become unstable
+- Save and continue support with browser localStorage
+- Achievement system based on play style
+- Semester progress tracker and final report
 - Early failure states and multiple final endings
 - Responsive layout for desktop and mobile
 
@@ -28,7 +32,9 @@ This repo includes:
 
 - Interactive game design with meaningful tradeoffs
 - Java/Processing fundamentals translated into a browser game
-- State management across health, food, grades, money, and time
+- State management across seven connected student-life variables
+- Save/load logic with localStorage
+- Consequence systems, achievements, and multiple endings
 - User-centered design around campus life decisions
 
 ## Case Study
@@ -39,12 +45,13 @@ College students make constant tradeoffs between studying, working, resting, eat
 
 ### Solution
 
-15 Weeks at UMBC is a semester-long decision game where players choose weekly actions and manage health, food, grades, and money. Each decision affects the semester, leading to different outcomes based on the player's priorities and tradeoffs.
+15 Weeks at UMBC is a semester-long decision game where players choose weekly actions and manage health, food, grades, money, stress, support, and career readiness. Each decision affects the semester, leading to different outcomes based on the player's priorities and tradeoffs.
 
 ### Key Design Decisions
 
 - Built a 15-week structure to mirror a real semester
-- Used multiple student paths so the experience changes based on commuter or on-campus choices
+- Used six student paths so the experience changes based on a player's starting situation
+- Added stress, support, career readiness, achievements, and save/continue to make the game feel more complete
 - Added early failure states and multiple endings to make decisions meaningful
 - Preserved the original Processing sketch while also creating a deployable browser version
 
@@ -55,7 +62,7 @@ This project helped me practice programming logic, state management, interaction
 ### Future Improvements
 
 - Add more event variety based on major, work schedule, or club involvement
-- Add save/load support
+- Add sound effects and optional music
 - Add more visual polish and animations
 - Expand endings with more detailed semester summaries
 
