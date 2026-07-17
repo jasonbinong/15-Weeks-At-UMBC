@@ -174,6 +174,44 @@ const weeks = [
   ])
 ];
 
+const surpriseEvents = [
+  eventNote("Pop quiz: a surprise check-in rewards the students who kept up.", { grades: 5, stress: 3 }),
+  eventNote("Campus pantry visit: you find support before food becomes a crisis.", { food: 8, social: 2, stress: -2 }),
+  eventNote("Rainy commute: campus logistics make the day harder than expected.", { health: -3, stress: 4 }),
+  eventNote("Professor feedback: office hours make the next assignment clearer.", { grades: 5, career: 2, stress: -3 }),
+  eventNote("Club invitation: a quick campus event helps your support network.", { social: 6, health: 2, grades: -1 }),
+  eventNote("Scholarship reminder: you catch a money opportunity before the deadline.", { money: 7, career: 2, stress: -2 }),
+  eventNote("Group chat chaos: coordination gets messy and costs focus.", { grades: -3, stress: 5, social: -2 }),
+  eventNote("Career tip: someone points you toward a project or resume improvement.", { career: 6, grades: 1 })
+];
+
+const pathEvents = {
+  commuter: {
+    6: eventNote("Commuter route change: you plan around transit instead of losing the whole day.", { stress: -3, grades: 2, health: 1 }),
+    11: eventNote("Commuter fatigue: the back-and-forth travel makes project week heavier.", { health: -4, stress: 5 })
+  },
+  working: {
+    5: eventNote("Work credibility: a shift story becomes useful professional experience.", { career: 5, money: 3 }),
+    12: eventNote("Schedule squeeze: work, bills, and finals start competing at once.", { stress: 6, health: -3, grades: -2 })
+  },
+  firstYear: {
+    4: eventNote("First-year adjustment: you learn which campus resources are actually useful.", { social: 4, grades: 3, stress: -2 }),
+    10: eventNote("New-student overload: too many options make planning harder.", { stress: 5, grades: -2 })
+  },
+  transfer: {
+    7: eventNote("Transfer focus: prior college experience helps you study more efficiently.", { grades: 4, stress: -3 }),
+    13: eventNote("Network gap: you have to be intentional about meeting people here.", { career: 3, social: -2 })
+  },
+  honors: {
+    8: eventNote("Honors pressure: high standards make the group project feel personal.", { grades: 4, stress: 5, health: -2 }),
+    15: eventNote("Honors discipline: your study system holds up during the final week.", { grades: 5, stress: -2 })
+  },
+  athlete: {
+    6: eventNote("Team structure: practice routines keep your week organized.", { health: 4, social: 3, stress: -2 }),
+    12: eventNote("Game week conflict: travel pressure cuts into coursework.", { grades: -4, stress: 5, health: -2 })
+  }
+};
+
 let state = loadSavedState() || createNewState("commuter");
 
 const els = {
@@ -209,6 +247,7 @@ const els = {
   resultOutcome: document.querySelector("#resultOutcome"),
   resultTitle: document.querySelector("#resultTitle"),
   resultText: document.querySelector("#resultText"),
+  reportSummary: document.querySelector("#reportSummary"),
   resultGrid: document.querySelector("#resultGrid"),
   endingNotes: document.querySelector("#endingNotes")
 };
@@ -238,6 +277,17 @@ function choice(label, detail, effects) {
   return { label, detail, effects };
 }
 
+function buildSurpriseSchedule() {
+  const surpriseWeeks = [3, 6, 9, 12, 14];
+  const pool = [...surpriseEvents];
+  return surpriseWeeks.reduce((schedule, weekNumber) => {
+    const index = Math.floor(Math.random() * pool.length);
+    const [event] = pool.splice(index, 1);
+    schedule[weekNumber] = event;
+    return schedule;
+  }, {});
+}
+
 function createNewState(profile) {
   return {
     mode: "menu",
@@ -247,6 +297,7 @@ function createNewState(profile) {
     log: [profiles[profile].description],
     achievements: [],
     result: null,
+    surprises: buildSurpriseSchedule(),
     flags: {
       lowHealthWeeks: 0,
       highStressWeeks: 0,
@@ -279,6 +330,7 @@ function normalizeState(saved) {
     log: Array.isArray(saved.log) ? saved.log : fallback.log,
     achievements: Array.isArray(saved.achievements) ? saved.achievements : [],
     result: saved.result && typeof saved.result === "object" ? saved.result : null,
+    surprises: saved.surprises && typeof saved.surprises === "object" ? saved.surprises : fallback.surprises,
     weekIndex: clamp(Number(saved.weekIndex || 0), 0, weeks.length),
     mode: ["menu", "game", "result"].includes(saved.mode) ? saved.mode : "menu"
   };
@@ -395,6 +447,18 @@ function choose(option) {
   if (modifier) {
     applyEffects(modifier.effects);
     addLog(modifier.note);
+  }
+
+  const pathEvent = pathEvents[state.profile]?.[state.weekIndex + 1];
+  if (pathEvent) {
+    applyEffects(pathEvent.effects);
+    addLog(pathEvent.note);
+  }
+
+  const surprise = state.surprises[state.weekIndex + 1];
+  if (surprise) {
+    applyEffects(surprise.effects);
+    addLog(`Surprise event: ${surprise.note}`);
   }
 
   applyDynamicConsequences();
@@ -593,6 +657,13 @@ function renderSavedEnding() {
   `;
   els.resultTitle.textContent = title;
   els.resultText.textContent = text;
+  els.reportSummary.innerHTML = buildReportCards().map(item => `
+    <div class="report-card">
+      <span>${escapeHtml(item.label)}</span>
+      <strong>${escapeHtml(item.value)}</strong>
+      <small>${escapeHtml(item.detail)}</small>
+    </div>
+  `).join("");
   els.resultGrid.innerHTML = Object.entries(statInfo).map(([key, info]) => `
     <div class="result-stat">
       <span>${info.label}</span>
@@ -602,10 +673,24 @@ function renderSavedEnding() {
   els.endingNotes.innerHTML = buildEndingNotes().map(note => `<li>${escapeHtml(note)}</li>`).join("");
 }
 
+function buildReportCards() {
+  const score = getSemesterScore();
+  const best = Object.entries(state.stats).sort((a, b) => normalizedStat(b[0], b[1]) - normalizedStat(a[0], a[1]))[0];
+  const lowest = Object.entries(state.stats).sort((a, b) => normalizedStat(a[0], a[1]) - normalizedStat(b[0], b[1]))[0];
+  return [
+    { label: "Final Grade", value: getGradeEstimate(score), detail: `${score}/100 semester score` },
+    { label: "UMBC Rank", value: getSemesterRank(score), detail: `${profiles[state.profile].short} path` },
+    { label: "Best System", value: statInfo[best[0]].label, detail: `${best[1]} final value` },
+    { label: "Biggest Risk", value: statInfo[lowest[0]].label, detail: `${lowest[1]} final value` }
+  ];
+}
+
 function buildEndingNotes() {
   const notes = [
     `${profiles[state.profile].label} path completed ${Math.min(state.weekIndex + 1, weeks.length)} of ${weeks.length} weeks.`,
     `Semester score: ${getSemesterScore()}/100.`,
+    `Estimated final grade: ${getGradeEstimate(getSemesterScore())}.`,
+    `UMBC survival rank: ${getSemesterRank(getSemesterScore())}.`,
     `Achievements: ${state.achievements.length ? state.achievements.join(", ") : "none yet"}.`
   ];
   const lowest = Object.entries(state.stats).sort((a, b) => normalizedStat(a[0], a[1]) - normalizedStat(b[0], b[1]))[0];
@@ -613,6 +698,23 @@ function buildEndingNotes() {
   if (state.stats.career >= 60) notes.push("Career readiness improved because you invested in portfolio, advising, or networking moments.");
   if (state.stats.social >= 70) notes.push("Your support system became a real advantage during pressure weeks.");
   return notes;
+}
+
+function getGradeEstimate(score) {
+  if (score >= 90) return "A";
+  if (score >= 82) return "B+";
+  if (score >= 74) return "B";
+  if (score >= 66) return "C";
+  if (score >= 55) return "D";
+  return "F";
+}
+
+function getSemesterRank(score) {
+  if (score >= 90) return "Retriever Legend";
+  if (score >= 82) return "Dean's List Run";
+  if (score >= 72) return "Finals Survivor";
+  if (score >= 60) return "Semester Scrapper";
+  return "Warning Semester";
 }
 
 function getFailedStat() {
