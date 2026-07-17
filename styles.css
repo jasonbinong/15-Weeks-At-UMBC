@@ -448,14 +448,13 @@ h3 {
 
 .scene-grid {
   display: grid;
-  grid-template-columns: minmax(360px, 1.08fr) minmax(380px, 0.92fr);
+  grid-template-columns: minmax(420px, 1.12fr) minmax(380px, 0.88fr);
   gap: 22px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .scene-media {
-  aspect-ratio: 16 / 9;
-  min-height: 0;
+  min-height: clamp(460px, 42vw, 620px);
   margin-bottom: 0;
   position: relative;
   overflow: hidden;
@@ -470,13 +469,13 @@ h3 {
 .scene-media::before {
   content: "";
   position: absolute;
-  inset: 0;
-  z-index: 1;
+  inset: -18px;
+  z-index: 0;
   background:
-    radial-gradient(circle at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.42) 100%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.055) 0 1px, transparent 1px 6px),
-    repeating-linear-gradient(0deg, rgba(255, 194, 28, 0.05) 0 1px, transparent 1px 6px);
-  mix-blend-mode: overlay;
+    linear-gradient(rgba(11, 8, 4, 0.34), rgba(11, 8, 4, 0.34)),
+    var(--scene-art) center / cover no-repeat;
+  filter: blur(10px) saturate(1.2) brightness(0.78);
+  transform: scale(1.04);
   pointer-events: none;
 }
 
@@ -486,6 +485,9 @@ h3 {
   inset: 0;
   z-index: 2;
   background:
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.36) 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.055) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(0deg, rgba(255, 194, 28, 0.05) 0 1px, transparent 1px 6px),
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0 2px, rgba(0, 0, 0, 0.12) 2px 4px),
     linear-gradient(90deg, rgba(255, 186, 20, 0.22), transparent 34%, rgba(0, 0, 0, 0.24)),
     linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 18%, rgba(0, 0, 0, 0.34));
@@ -502,6 +504,8 @@ h3 {
   filter: saturate(1.12) contrast(1.08) brightness(0.9);
   transform: scale(1);
   transition: opacity 260ms ease, transform 260ms ease, filter 260ms ease;
+  position: relative;
+  z-index: 1;
 }
 
 .game-view.is-changing .scene-media img {
@@ -535,7 +539,7 @@ h3 {
 }
 
 .scenario-card {
-  min-height: clamp(420px, 39vw, 540px);
+  min-height: clamp(460px, 42vw, 620px);
   padding: 26px;
   display: flex;
   flex-direction: column;

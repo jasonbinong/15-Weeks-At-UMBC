@@ -193,6 +193,7 @@ const els = {
   weekCounter: document.querySelector("#weekCounter"),
   semesterTrack: document.querySelector("#semesterTrack"),
   difficultyBadge: document.querySelector("#difficultyBadge"),
+  sceneMedia: document.querySelector(".scene-media"),
   sceneImage: document.querySelector("#sceneImage"),
   sceneCaption: document.querySelector("#sceneCaption"),
   scenarioKicker: document.querySelector("#scenarioKicker"),
@@ -362,6 +363,7 @@ function renderWeek() {
   els.weekTitle.textContent = current.title;
   els.weekCounter.textContent = `${state.weekIndex + 1} / ${weeks.length}`;
   els.difficultyBadge.textContent = ["Normal", "Tight", "High pressure"][current.difficulty - 1] || "Normal";
+  els.sceneMedia.style.setProperty("--scene-art", `url("data/${image.file}")`);
   els.sceneImage.src = `data/${image.file}`;
   els.sceneImage.alt = `${image.label} UMBC campus scene`;
   els.sceneCaption.textContent = image.label;
