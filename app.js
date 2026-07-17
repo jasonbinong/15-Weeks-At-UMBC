@@ -206,6 +206,7 @@ const els = {
   choiceLog: document.querySelector("#choiceLog"),
   achievementList: document.querySelector("#achievementList"),
   resultEyebrow: document.querySelector("#resultEyebrow"),
+  resultOutcome: document.querySelector("#resultOutcome"),
   resultTitle: document.querySelector("#resultTitle"),
   resultText: document.querySelector("#resultText"),
   resultGrid: document.querySelector("#resultGrid"),
@@ -245,6 +246,7 @@ function createNewState(profile) {
     stats: structuredClone(profiles[profile].start),
     log: [profiles[profile].description],
     achievements: [],
+    result: null,
     flags: {
       lowHealthWeeks: 0,
       highStressWeeks: 0,
@@ -276,6 +278,7 @@ function normalizeState(saved) {
     flags: { ...fallback.flags, ...(saved.flags || {}) },
     log: Array.isArray(saved.log) ? saved.log : fallback.log,
     achievements: Array.isArray(saved.achievements) ? saved.achievements : [],
+    result: saved.result && typeof saved.result === "object" ? saved.result : null,
     weekIndex: clamp(Number(saved.weekIndex || 0), 0, weeks.length),
     mode: ["menu", "game", "result"].includes(saved.mode) ? saved.mode : "menu"
   };
@@ -341,7 +344,13 @@ function resetGame() {
 function renderAll() {
   renderStatus();
   if (state.mode === "game" && state.weekIndex < weeks.length) renderWeek();
-  if (state.mode === "result") showFinalEnding(false);
+  if (state.mode === "result") {
+    if (state.result) {
+      renderSavedEnding();
+    } else {
+      showFinalEnding(false);
+    }
+  }
   els.continueButton.disabled = !(state.mode === "game" && state.weekIndex < weeks.length);
 }
 
@@ -377,6 +386,7 @@ function renderWeek() {
 }
 
 function choose(option) {
+  setChoicesDisabled(true);
   applyEffects(option.effects);
   updateChoiceFlags(option.effects);
   addLog(`${weeks[state.weekIndex].title}: ${option.label}`);
@@ -393,7 +403,16 @@ function choose(option) {
 
   const failed = getFailedStat();
   if (failed) {
-    showEnding("Semester ended early", `${statInfo[failed].label} collapsed`, getFailureText(failed));
+    showEnding(
+      "Semester ended early",
+      `${statInfo[failed].label} collapsed`,
+      getFailureText(failed),
+      {
+        label: "Failed Semester",
+        tone: "fail",
+        detail: `${statInfo[failed].label} dropped too low before finals.`
+      }
+    );
     return;
   }
 
@@ -405,7 +424,28 @@ function choose(option) {
 
   state.mode = "game";
   saveState();
-  renderWeek();
+  transitionToNextWeek();
+}
+
+function transitionToNextWeek() {
+  const next = weeks[state.weekIndex];
+  const nextImage = images[next.image];
+  const preloader = new Image();
+  preloader.src = `data/${nextImage.file}`;
+
+  els.gameView.classList.add("is-changing");
+  window.setTimeout(() => {
+    renderWeek();
+    window.requestAnimationFrame(() => {
+      els.gameView.classList.remove("is-changing");
+    });
+  }, 260);
+}
+
+function setChoicesDisabled(disabled) {
+  els.choices.querySelectorAll("button").forEach(button => {
+    button.disabled = disabled;
+  });
 }
 
 function applyEffects(effects) {
@@ -493,10 +533,14 @@ function showFinalEnding(advanceMode) {
   if (advanceMode) state.mode = "result";
   const score = getSemesterScore();
   const lowest = Object.entries(state.stats).sort((a, b) => normalizedStat(a[0], a[1]) - normalizedStat(b[0], b[1]))[0];
+  const passedSemester = state.stats.grades >= 60 && score >= 55 && state.stats.health >= 20 && state.stats.food >= 20;
   let title = "Survived the Semester";
   let text = `You reached the end, but the semester was uneven. Your final semester score was ${score}, and ${statInfo[lowest[0]].label.toLowerCase()} was the toughest area.`;
 
-  if (score >= 84 && normalizedStat(lowest[0], lowest[1]) >= 45) {
+  if (!passedSemester) {
+    title = "Semester Did Not Pass";
+    text = `You made it to finals week, but the overall balance was too low to pass the semester cleanly. Your final semester score was ${score}, and ${statInfo[lowest[0]].label.toLowerCase()} hurt the outcome most.`;
+  } else if (score >= 84 && normalizedStat(lowest[0], lowest[1]) >= 45) {
     title = "Balanced Semester";
     text = `You made it through all 15 weeks with strong overall balance. Your final semester score was ${score}, and even your weakest area stayed manageable.`;
   } else if (state.stats.grades >= 82 && state.stats.career >= 60) {
@@ -516,11 +560,37 @@ function showFinalEnding(advanceMode) {
     text = "You made it to the end, but stress ran the semester. The next run needs earlier recovery and support.";
   }
 
-  showEnding("Semester complete", title, text);
+  showEnding(
+    "Semester complete",
+    title,
+    text,
+    {
+      label: passedSemester ? "Passed Semester" : "Failed Semester",
+      tone: passedSemester ? "pass" : "fail",
+      detail: passedSemester
+        ? `Final score: ${score}/100. Grades, health, food, and pressure stayed above the survival line.`
+        : `Final score: ${score}/100. One or more core semester systems fell below the survival line.`
+    }
+  );
 }
 
-function showEnding(eyebrow, title, text) {
+function showEnding(eyebrow, title, text, outcome = { label: "Semester Complete", tone: "neutral", detail: "" }) {
+  state.result = { eyebrow, title, text, outcome };
+  renderSavedEnding();
+  state.mode = "result";
+  saveState();
+  showView("result");
+}
+
+function renderSavedEnding() {
+  const { eyebrow, title, text } = state.result;
+  const outcome = state.result.outcome || { label: "Semester Complete", tone: "neutral", detail: "" };
   els.resultEyebrow.textContent = eyebrow;
+  els.resultOutcome.className = `result-outcome ${outcome.tone}`;
+  els.resultOutcome.innerHTML = `
+    <strong>${escapeHtml(outcome.label)}</strong>
+    <span>${escapeHtml(outcome.detail)}</span>
+  `;
   els.resultTitle.textContent = title;
   els.resultText.textContent = text;
   els.resultGrid.innerHTML = Object.entries(statInfo).map(([key, info]) => `
@@ -530,9 +600,6 @@ function showEnding(eyebrow, title, text) {
     </div>
   `).join("");
   els.endingNotes.innerHTML = buildEndingNotes().map(note => `<li>${escapeHtml(note)}</li>`).join("");
-  state.mode = "result";
-  saveState();
-  showView("result");
 }
 
 function buildEndingNotes() {

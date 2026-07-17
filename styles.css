@@ -498,6 +498,22 @@ h3 {
   image-rendering: pixelated;
   filter: saturate(1.12) contrast(1.08) brightness(0.9);
   transform: scale(1.018);
+  transition: opacity 260ms ease, transform 260ms ease, filter 260ms ease;
+}
+
+.game-view.is-changing .scene-media img {
+  opacity: 0;
+  filter: saturate(1.4) contrast(1.3) brightness(0.45);
+  transform: scale(1.06);
+}
+
+.game-view.is-changing .scenario-card {
+  opacity: 0.45;
+  transform: translateY(8px);
+}
+
+.scenario-card {
+  transition: opacity 260ms ease, transform 260ms ease;
 }
 
 .scene-media figcaption {
@@ -721,6 +737,51 @@ h3 {
 
 .result-view {
   max-width: 940px;
+}
+
+.result-outcome {
+  margin: 0 0 18px;
+  padding: 18px 20px;
+  position: relative;
+  border: 4px solid #080808;
+  outline: 3px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.45), transparent 22%),
+    linear-gradient(135deg, #ffd34a, #fdb515 54%, #9f5202);
+  color: #101010;
+  box-shadow: 8px 8px 0 #000;
+}
+
+.result-outcome strong,
+.result-outcome span {
+  display: block;
+}
+
+.result-outcome strong {
+  font-family: var(--pixel-font);
+  font-size: clamp(1.7rem, 4vw, 3.4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.42);
+}
+
+.result-outcome span {
+  max-width: 760px;
+  margin-top: 8px;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.result-outcome.fail {
+  outline-color: #ffd0d5;
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.34), transparent 22%),
+    linear-gradient(135deg, #ff5962, #c6282e 58%, #52070b);
+  color: #fff;
+}
+
+.result-outcome.fail strong {
+  text-shadow: 3px 3px 0 #000;
 }
 
 .result-grid {
