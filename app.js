@@ -1,14 +1,14 @@
 const STORAGE_KEY = "fifteen-weeks-umbc-save-v2";
 
 const images = {
-  library: { file: "library.jpg", label: "Library" },
-  lecture: { file: "lecture hall.jpg", label: "Lecture Hall" },
-  starbucks: { file: "starbucks.jpg", label: "Starbucks" },
-  gameroom: { file: "gameroom.jpg", label: "Gameroom" },
-  trueGrits: { file: "true grits.jpg", label: "True Grits" },
-  commons: { file: "the commons.jpg", label: "The Commons" },
-  dorm: { file: "chesapeake.jpg", label: "Chesapeake Hall" },
-  gym: { file: "gym.jpg", label: "Gym" }
+  library: { file: "arcade/library.png", label: "Library" },
+  lecture: { file: "arcade/lecture.png", label: "Lecture Hall" },
+  starbucks: { file: "arcade/cafe.png", label: "Campus Cafe" },
+  gameroom: { file: "arcade/gameroom.png", label: "Game Room" },
+  trueGrits: { file: "arcade/dining.png", label: "Dining Hall" },
+  commons: { file: "arcade/commons.png", label: "The Commons" },
+  dorm: { file: "arcade/dorm.png", label: "Residence Hall" },
+  gym: { file: "arcade/gym.png", label: "Fitness Center" }
 };
 
 const statInfo = {

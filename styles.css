@@ -447,6 +447,7 @@ h3 {
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0 2px, rgba(0, 0, 0, 0.12) 2px 4px),
     linear-gradient(90deg, rgba(255, 186, 20, 0.22), transparent 34%, rgba(0, 0, 0, 0.24)),
     linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 18%, rgba(0, 0, 0, 0.34));
+  opacity: 0.72;
   pointer-events: none;
 }
 
@@ -456,7 +457,7 @@ h3 {
   display: block;
   object-fit: cover;
   image-rendering: pixelated;
-  filter: saturate(1.45) contrast(1.32) brightness(0.62) sepia(0.16);
+  filter: saturate(1.12) contrast(1.08) brightness(0.9);
   transform: scale(1.018);
 }
 
