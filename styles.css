@@ -425,14 +425,28 @@ h3 {
   box-shadow: 8px 8px 0 #000;
 }
 
+.scene-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.42) 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.055) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(0deg, rgba(255, 194, 28, 0.05) 0 1px, transparent 1px 6px);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
 .scene-media::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 2;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.035) 50%, rgba(0, 0, 0, 0.04) 50%),
-    linear-gradient(90deg, rgba(255, 186, 20, 0.12), transparent 30%);
-  background-size: 100% 4px, auto;
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0 2px, rgba(0, 0, 0, 0.12) 2px 4px),
+    linear-gradient(90deg, rgba(255, 186, 20, 0.22), transparent 34%, rgba(0, 0, 0, 0.24)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 18%, rgba(0, 0, 0, 0.34));
   pointer-events: none;
 }
 
@@ -441,7 +455,9 @@ h3 {
   height: 100%;
   display: block;
   object-fit: cover;
-  filter: saturate(1.08) contrast(1.08) brightness(0.78);
+  image-rendering: pixelated;
+  filter: saturate(1.45) contrast(1.32) brightness(0.62) sepia(0.16);
+  transform: scale(1.018);
 }
 
 .scene-media figcaption {
@@ -456,6 +472,7 @@ h3 {
   font-size: 0.78rem;
   font-weight: 900;
   box-shadow: 3px 3px 0 #000;
+  z-index: 3;
 }
 
 .scenario-card {
