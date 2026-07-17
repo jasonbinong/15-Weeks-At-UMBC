@@ -364,7 +364,7 @@ function renderWeek() {
 
   current.choices.forEach((option, index) => {
     const button = document.createElement("button");
-    button.className = "choice-button";
+    button.className = `choice-button choice-${index + 1}`;
     button.type = "button";
     button.innerHTML = `
       <span>${index + 1}. ${option.label}</span>
