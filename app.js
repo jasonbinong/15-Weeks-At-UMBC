@@ -12,13 +12,13 @@ const images = {
 };
 
 const statInfo = {
-  health: { label: "Health", color: "red" },
-  food: { label: "Food", color: "orange" },
-  grades: { label: "Grades", color: "blue" },
-  money: { label: "Money", color: "green" },
-  stress: { label: "Stress", color: "purple", inverted: true },
-  social: { label: "Support", color: "teal" },
-  career: { label: "Career", color: "gold" }
+  health: { label: "Health", color: "red", icon: "♥" },
+  food: { label: "Food", color: "orange", icon: "▰" },
+  grades: { label: "Grades", color: "blue", icon: "▣" },
+  money: { label: "Money", color: "green", icon: "$" },
+  stress: { label: "Stress", color: "purple", icon: "!" , inverted: true },
+  social: { label: "Support", color: "teal", icon: "◆" },
+  career: { label: "Career", color: "gold", icon: "★" }
 };
 
 const profiles = {
@@ -474,7 +474,7 @@ function renderStatus() {
   els.meters.innerHTML = Object.entries(statInfo).map(([key, info]) => `
     <div class="meter">
       <div class="meter-label">
-        <span>${info.label}</span>
+        <span><i class="stat-icon ${info.color}">${info.icon}</i>${info.label}</span>
         <span>${state.stats[key]}</span>
       </div>
       <div class="meter-track">
@@ -591,7 +591,7 @@ function renderMiniBar(key, value) {
   const width = info.inverted ? 100 - value : value;
   return `
     <div class="mini-bar">
-      <span>${info.label}</span>
+      <span><i class="stat-icon ${info.color}">${info.icon}</i>${info.label}</span>
       <div><i class="${info.color}" style="width:${width}%"></i></div>
       <strong>${value}</strong>
     </div>
